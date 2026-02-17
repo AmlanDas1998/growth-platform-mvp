@@ -92,6 +92,7 @@ export default function SiteBuilderPage() {
             <div className="absolute top-8 right-8 text-[10px] font-black uppercase tracking-[0.4em] opacity-50 flex items-center gap-2">
               <Globe size={12} /> Live Preview
             </div>
+            {/* TAG FIX APPLIED HERE */}
             <motion.h1 
               key={siteData.title}
               initial={{ y: 20, opacity: 0 }}
@@ -99,7 +100,7 @@ export default function SiteBuilderPage() {
               className="text-5xl md:text-7xl font-black tracking-tighter leading-none"
             >
               {siteData.title}
-            </h1>
+            </motion.h1>
             <p className="opacity-70 text-sm md:text-lg mt-4 font-medium tracking-wide">Personal Brand Identity</p>
           </div>
 
