@@ -91,7 +91,7 @@ export default function SiteBuilderPage() {
           layout
           className="w-full max-w-4xl aspect-video md:aspect-[16/10] bg-zinc-900 rounded-[3rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col relative z-10"
         >
-          {/* THE FIX: Safe indexing of themes object */}
+          {/* Header/Hero Section of the Preview */}
           <div className={`h-1/2 bg-gradient-to-br ${themes[siteData.theme]} p-12 md:p-20 flex flex-col justify-end text-white relative overflow-hidden`}>
             <div className="absolute top-8 right-8 text-[10px] font-black uppercase tracking-[0.4em] opacity-50 flex items-center gap-2">
               <Globe size={12} /> Live Preview
@@ -103,7 +103,7 @@ export default function SiteBuilderPage() {
               className="text-5xl md:text-7xl font-black tracking-tighter leading-none"
             >
               {siteData.title}
-            </h1 >
+            </h1>
             <p className="opacity-70 text-sm md:text-lg mt-4 font-medium tracking-wide">Personal Brand Identity</p>
           </div>
 
@@ -118,10 +118,10 @@ export default function SiteBuilderPage() {
             </div>
 
             <div className="flex items-center gap-6 pt-10 border-t border-slate-100">
-              <div className="h-10 w-32 bg-slate-900 rounded-full flex items-center justify-center text-[9px] font-black text-white tracking-widest uppercase shadow-lg shadow-black/20">
+              <div className="h-10 w-32 bg-slate-900 rounded-full flex items-center justify-center text-[9px] font-black text-white tracking-widest uppercase shadow-lg shadow-black/20 cursor-pointer">
                 Connect
               </div>
-              <div className="h-10 w-32 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[9px] font-black text-slate-400 tracking-widest uppercase">
+              <div className="h-10 w-32 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[9px] font-black text-slate-400 tracking-widest uppercase cursor-pointer">
                 Portfolio
               </div>
             </div>
