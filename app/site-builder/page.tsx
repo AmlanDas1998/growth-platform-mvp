@@ -1,113 +1,139 @@
 "use client";
 import React, { useState } from 'react';
-import { Globe, Palette, Layout, ArrowLeft, ExternalLink, Github, Linkedin, Twitter } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  ArrowLeft, Sparkles, Globe, Layout, 
+  Palette, Type, Save, CheckCircle2 
+} from 'lucide-react';
 import Link from 'next/link';
 
-export default function SiteBuilder() {
+// 1. TYPESAFE THEME DEFINITIONS
+type ThemeKey = 'blue' | 'dark' | 'rose' | 'emerald';
+
+const themes: Record<ThemeKey, string> = {
+  blue: "from-blue-600 to-indigo-700 shadow-blue-500/20",
+  dark: "from-slate-800 to-black shadow-slate-500/20",
+  rose: "from-rose-500 to-orange-500 shadow-rose-500/20",
+  emerald: "from-emerald-500 to-teal-600 shadow-emerald-500/20"
+};
+
+export default function SiteBuilderPage() {
   const [siteData, setSiteData] = useState({
-    title: "Amlan's Portfolio",
-    bio: "Building the future of finance and personal branding.",
-    theme: "blue",
-    github: "",
-    linkedin: ""
+    title: "Amlan Das | Professional Profile",
+    theme: 'dark' as ThemeKey,
+    bio: "Building the future of student finance and professional growth in Pune.",
   });
 
-  const themes = {
-    blue: "from-blue-600 to-indigo-700",
-    dark: "from-slate-800 to-black",
-    rose: "from-rose-500 to-pink-600",
-    emerald: "from-emerald-500 to-teal-700"
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleSave = () => {
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 2000);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-black text-white font-sans flex flex-col md:flex-row">
       
-      {/* LEFT: The Editor Panel */}
-      <div className="w-full lg:w-[400px] bg-white border-r border-slate-200 p-8 overflow-y-auto h-screen">
-        <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-black mb-10 transition-all text-sm font-bold">
-          <ArrowLeft size={16} /> BACK TO DASHBOARD
+      {/* --- SIDEBAR: BOUTIQUE CONTROLS --- */}
+      <aside className="w-full md:w-80 bg-zinc-900/50 border-r border-white/10 p-8 flex flex-col gap-10 z-20">
+        <Link href="/" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors">
+          <ArrowLeft size={14} /> Back to Hub
         </Link>
 
-        <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
-          <Layout className="text-blue-600" /> Site Editor
-        </h2>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-black tracking-tighter italic">SITE BUILDER</h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Student Career Branding</p>
+        </div>
 
+        {/* Control Group: Text */}
         <div className="space-y-6">
-          <div>
-            <label className="text-xs font-black uppercase text-slate-400 mb-2 block">Website Title</label>
-            <input 
-              type="text" 
-              value={siteData.title}
-              onChange={(e) => setSiteData({...siteData, title: e.target.value})}
-              className="w-full p-3 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+          <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400">
+            <Type size={14} /> Site Title
+          </label>
+          <input 
+            type="text" 
+            value={siteData.title}
+            onChange={(e) => setSiteData({...siteData, title: e.target.value})}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-cyan-500 outline-none transition-all"
+          />
+        </div>
 
-          <div>
-            <label className="text-xs font-black uppercase text-slate-400 mb-2 block">Your Bio</label>
-            <textarea 
-              value={siteData.bio}
-              onChange={(e) => setSiteData({...siteData, bio: e.target.value})}
-              className="w-full p-3 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none h-32"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-black uppercase text-slate-400 mb-2 block">Choose Theme</label>
-            <div className="grid grid-cols-4 gap-2">
-              {Object.keys(themes).map((t) => (
-                <button 
-                  key={t}
-                  onClick={() => setSiteData({...siteData, theme: t})}
-                  className={`h-10 rounded-lg border-2 ${siteData.theme === t ? 'border-blue-600' : 'border-transparent'} transition-all`}
-                  style={{ background: t === 'dark' ? '#000' : t }}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="pt-6 border-t">
-            <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:shadow-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
-              <Globe size={18} /> Publish Website
-            </button>
+        {/* Control Group: Themes */}
+        <div className="space-y-6">
+          <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-fuchsia-400">
+            <Palette size={14} /> Color Palette
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            {(Object.keys(themes) as ThemeKey[]).map((t) => (
+              <button
+                key={t}
+                onClick={() => setSiteData({...siteData, theme: t})}
+                className={`h-12 rounded-xl bg-gradient-to-br ${themes[t]} border-2 transition-all ${siteData.theme === t ? 'border-white scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`}
+              />
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* RIGHT: Live Preview (What the world sees) */}
-      <div className="flex-1 bg-slate-200 p-4 md:p-12 flex items-center justify-center overflow-y-auto h-screen">
-        <div className="w-full max-w-[800px] bg-white rounded-[2rem] shadow-2xl overflow-hidden min-h-[600px] flex flex-col">
-          {/* Header/Hero Section of the Preview */}
-          <div className={`h-64 bg-gradient-to-br ${themes[siteData.theme]} p-12 flex flex-col justify-end text-white`}>
-            <h1 className="text-5xl font-black tracking-tight">{siteData.title}</h1>
-            <p className="opacity-80 text-lg mt-2 font-medium">Personal Brand Website</p>
+        <button 
+          onClick={handleSave}
+          className="mt-auto w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-cyan-500 hover:text-white transition-all"
+        >
+          {isSaved ? <><CheckCircle2 size={16} /> Saved</> : <><Save size={16} /> Save Changes</>}
+        </button>
+      </aside>
+
+      {/* --- PREVIEW AREA: CINEMATIC CANVAS --- */}
+      <main className="flex-1 bg-black relative flex items-center justify-center p-6 md:p-12 overflow-hidden">
+        {/* Ambient Glow */}
+        <div className={`absolute inset-0 opacity-20 blur-[150px] bg-gradient-to-br ${themes[siteData.theme]} pointer-events-none`} />
+
+        <motion.div 
+          layout
+          className="w-full max-w-4xl aspect-video md:aspect-[16/10] bg-zinc-900 rounded-[3rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col relative z-10"
+        >
+          {/* THE FIX: Safe indexing of themes object */}
+          <div className={`h-1/2 bg-gradient-to-br ${themes[siteData.theme]} p-12 md:p-20 flex flex-col justify-end text-white relative overflow-hidden`}>
+            <div className="absolute top-8 right-8 text-[10px] font-black uppercase tracking-[0.4em] opacity-50 flex items-center gap-2">
+              <Globe size={12} /> Live Preview
+            </div>
+            <motion.h1 
+              key={siteData.title}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="text-5xl md:text-7xl font-black tracking-tighter leading-none"
+            >
+              {siteData.title}
+            </h1 >
+            <p className="opacity-70 text-sm md:text-lg mt-4 font-medium tracking-wide">Personal Brand Identity</p>
           </div>
 
-          {/* Content of the Preview */}
-          <div className="p-12 space-y-8 flex-1">
-            <div>
-              <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">About Me</h3>
-              <p className="text-2xl text-slate-800 leading-snug font-medium">
+          <div className="flex-1 p-12 md:p-20 bg-white text-black flex flex-col justify-between">
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <Layout size={14} /> Student Biography
+              </div>
+              <p className="text-xl md:text-3xl font-bold tracking-tight text-slate-800 leading-tight">
                 {siteData.bio}
               </p>
             </div>
 
-            <div className="flex gap-4">
-              <div className="p-4 bg-slate-50 rounded-2xl flex items-center gap-3 border border-slate-100 flex-1">
-                <Github size={20} /> <span className="text-sm font-bold">GitHub</span>
+            <div className="flex items-center gap-6 pt-10 border-t border-slate-100">
+              <div className="h-10 w-32 bg-slate-900 rounded-full flex items-center justify-center text-[9px] font-black text-white tracking-widest uppercase shadow-lg shadow-black/20">
+                Connect
               </div>
-              <div className="p-4 bg-slate-50 rounded-2xl flex items-center gap-3 border border-slate-100 flex-1">
-                <Linkedin size={20} /> <span className="text-sm font-bold">LinkedIn</span>
+              <div className="h-10 w-32 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[9px] font-black text-slate-400 tracking-widest uppercase">
+                Portfolio
               </div>
             </div>
           </div>
+        </motion.div>
 
-          <div className="p-8 border-t border-slate-50 text-center text-slate-300 text-xs font-bold uppercase tracking-widest">
-            Built with Growth Platform
-          </div>
+        {/* Section Indicator */}
+        <div className="absolute bottom-8 right-12 flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+          <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.6em]">Pune Student Ecosystem</span>
         </div>
-      </div>
-
+      </main>
     </div>
   );
 }
