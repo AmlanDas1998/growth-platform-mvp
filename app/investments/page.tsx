@@ -99,4 +99,10 @@ export default function InvestmentCalculator() {
       </div>
     </div>
   );
-}
+}<footer className="mt-12 pt-8 border-t border-slate-200 text-center">
+  <p className="text-[10px] text-slate-400 leading-relaxed uppercase tracking-widest font-bold">
+    Disclaimer: Mutual Fund investments are subject to market risks. <br />
+    Please read all scheme-related documents carefully before investing. 
+    Built for the growth of users in Pune and beyond.
+  </p>
+</footer>
