@@ -42,10 +42,9 @@ export default function SiteBuilderPage() {
 
         <div className="space-y-2">
           <h2 className="text-2xl font-black tracking-tighter italic">SITE BUILDER</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Student Career Branding</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-white/50">Student Career Branding</p>
         </div>
 
-        {/* Control Group: Text */}
         <div className="space-y-6">
           <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400">
             <Type size={14} /> Site Title
@@ -58,7 +57,6 @@ export default function SiteBuilderPage() {
           />
         </div>
 
-        {/* Control Group: Themes */}
         <div className="space-y-6">
           <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-fuchsia-400">
             <Palette size={14} /> Color Palette
@@ -82,16 +80,14 @@ export default function SiteBuilderPage() {
         </button>
       </aside>
 
-      {/* --- PREVIEW AREA: CINEMATIC CANVAS --- */}
+      {/* --- PREVIEW AREA --- */}
       <main className="flex-1 bg-black relative flex items-center justify-center p-6 md:p-12 overflow-hidden">
-        {/* Ambient Glow */}
         <div className={`absolute inset-0 opacity-20 blur-[150px] bg-gradient-to-br ${themes[siteData.theme]} pointer-events-none`} />
 
         <motion.div 
           layout
           className="w-full max-w-4xl aspect-video md:aspect-[16/10] bg-zinc-900 rounded-[3rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col relative z-10"
         >
-          {/* Header/Hero Section of the Preview */}
           <div className={`h-1/2 bg-gradient-to-br ${themes[siteData.theme]} p-12 md:p-20 flex flex-col justify-end text-white relative overflow-hidden`}>
             <div className="absolute top-8 right-8 text-[10px] font-black uppercase tracking-[0.4em] opacity-50 flex items-center gap-2">
               <Globe size={12} /> Live Preview
@@ -128,7 +124,6 @@ export default function SiteBuilderPage() {
           </div>
         </motion.div>
 
-        {/* Section Indicator */}
         <div className="absolute bottom-8 right-12 flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
           <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.6em]">Pune Student Ecosystem</span>
