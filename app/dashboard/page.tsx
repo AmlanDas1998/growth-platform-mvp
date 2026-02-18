@@ -3,20 +3,27 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   FileText, Globe, Zap, ArrowRight, TrendingUp, Users, Eye, 
-  Download, User, ShieldCheck // FIX: Added Download to imports
+  Download, User, ShieldCheck 
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  // --- ANIMATION VARIANTS ---
+  // --- FIX: Build-safe Animation Variants ---
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.6, ease: "easeOut" } // Standard easing to avoid Type errors
+    }
   };
 
   const staggerContainer = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.1 } 
+    }
   };
 
   return (
@@ -41,7 +48,6 @@ export default function DashboardPage() {
           initial="hidden" animate="visible" variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          
           {/* 1. CV BUILDER TILE */}
           <Link href="/cv-builder">
             <motion.div 
@@ -94,7 +100,7 @@ export default function DashboardPage() {
             </motion.div>
           </Link>
 
-          {/* 3. PROFILE BUILDER TILE (Connected to /profile) */}
+          {/* 3. PROFILE BUILDER TILE */}
           <Link href="/profile">
             <motion.div 
               variants={fadeInUp} whileHover={{ y: -8, borderColor: 'rgba(59,130,246,0.3)' }}
@@ -119,10 +125,9 @@ export default function DashboardPage() {
               </div>
             </motion.div>
           </Link>
-
         </motion.div>
 
-        {/* --- QUICK STATS ROW --- */}
+        {/* --- STATS SECTION --- */}
         <motion.div 
           initial="hidden" animate="visible" variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-4 gap-4"
@@ -146,19 +151,11 @@ export default function DashboardPage() {
           ))}
         </motion.div>
 
-        {/* --- FOOTER --- */}
-        <motion.footer 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-          className="pt-20 border-t border-white/5 flex justify-between items-center"
-        >
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-700">
-            Amlan Das Boutique Career Ecosystem
+        <footer className="pt-20 border-t border-white/5 flex justify-between items-center text-zinc-700">
+          <p className="text-[10px] font-black uppercase tracking-[0.5em]">
+            Boutique Career Ecosystem
           </p>
-          <div className="flex gap-6 text-[9px] font-black uppercase tracking-widest text-zinc-500">
-             <span className="hover:text-white cursor-pointer">Settings</span>
-             <span className="hover:text-white cursor-pointer">Help</span>
-          </div>
-        </motion.footer>
+        </footer>
 
       </div>
     </div>
