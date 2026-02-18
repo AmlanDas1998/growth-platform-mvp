@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   FileText, Globe, Zap, ArrowRight, TrendingUp, Users, Eye, 
-  Download, User, ShieldCheck // FIX: All icons imported correctly
+  Download, User, ShieldCheck // FIX: Added Download to imports to prevent build fail
 } from 'lucide-react';
 import Link from 'next/link';
 
