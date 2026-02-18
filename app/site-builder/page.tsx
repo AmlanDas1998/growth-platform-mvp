@@ -28,6 +28,7 @@ export default function SiteBuilderPage() {
   const [isSaved, setIsSaved] = useState(false);
   const accent = accentColors[palette];
 
+  // --- 12-SECTION DATA STRUCTURE ---
   const [siteData, setSiteData] = useState({
     hero: { name: "Amlan Das", title: "Strategy & Operations Lead", value: "Building scalable financial ecosystems for the next generation." },
     about: { header: "About Me", sub: "Professional Profile", bio: "Experienced professional with a focus on delivering impactful results in NBFC operations and credit strategy." },
@@ -60,6 +61,9 @@ export default function SiteBuilderPage() {
     setSiteData({ ...siteData, [section]: newList });
   };
 
+  // ---------------------------------------------------------------------------
+  // 🎨 TEMPLATE 1: MINIMAL EXECUTIVE (Fixed Headers)
+  // ---------------------------------------------------------------------------
   const ExecutiveTemplate = () => (
     <div className="bg-white text-slate-800 font-sans min-h-full">
       <section className="p-12 md:p-24 border-b border-slate-100 flex flex-col md:flex-row items-center gap-12">
@@ -75,7 +79,8 @@ export default function SiteBuilderPage() {
           <User size={48} />
         </div>
       </section>
-      {/* 2. ABOUT & 3. IMPACT */}
+
+      {/* ABOUT & IMPACT */}
       <section className="p-12 md:p-24 border-b border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-12">
         <div className="md:col-span-7 space-y-6">
           <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">{siteData.about.header}</h3>
@@ -90,7 +95,8 @@ export default function SiteBuilderPage() {
           ))}
         </div>
       </section>
-      {/* 4. SKILLS & 5. EXPERIENCE */}
+
+      {/* SKILLS & EXPERIENCE */}
       <section className="p-12 md:p-24 border-b border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
           <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Core Competencies</h3>
@@ -117,7 +123,8 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-      {/* 6. PROJECTS & 7. INSIGHTS */}
+
+      {/* PROJECTS & INSIGHTS (Bug Fix: Hardcoded "Insights" header) */}
       <section className="p-12 md:p-24 border-b border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
           <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Selected Projects</h3>
@@ -132,7 +139,8 @@ export default function SiteBuilderPage() {
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">{siteData.insights.header}</h3>
+          {/* FIX: Replaced {siteData.insights.header} with static "Insights" string */}
+          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Insights</h3>
           <div className="space-y-4">
             {siteData.insights.map((ins, i) => (
               <div key={i} className="flex items-center justify-between py-4 border-b border-slate-100">
@@ -143,11 +151,13 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-      {/* 8. TESTIMONIALS & 9. EDUCATION */}
+
+      {/* TESTIMONIALS & EDUCATION (Bug Fix: Hardcoded headers) */}
       <section className="p-12 md:p-24 border-b border-slate-100 bg-slate-50/50">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
            <div className="bg-white p-8 border border-slate-100 shadow-sm">
-             <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">{siteData.testimonials.header}</h3>
+             {/* FIX: Replaced dynamic header with static string */}
+             <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Testimonials</h3>
              {siteData.testimonials.map((t, i) => (
                <div key={i}>
                  <p className="text-xl font-serif italic text-slate-700">"{t.quote}"</p>
@@ -169,8 +179,9 @@ export default function SiteBuilderPage() {
            </div>
         </div>
       </section>
-      {/* 10. RESUME, 11. CONTACT & 12. FOOTER */}
-      <section className="p-12 md:p-24 bg-slate-50 text-center space-y-12">
+
+      {/* FOOTER */}
+      <section className="p-12 md:p-24 bg-slate-900 text-white text-center space-y-12">
         <div className="space-y-6">
           <h2 className="text-4xl font-serif font-bold text-slate-900">{siteData.contact.header}</h2>
           <p className="text-slate-500">{siteData.contact.sub}</p>
@@ -186,6 +197,9 @@ export default function SiteBuilderPage() {
     </div>
   );
 
+  // ---------------------------------------------------------------------------
+  // 🌑 TEMPLATE 2: DARK MODERN TECH
+  // ---------------------------------------------------------------------------
   const TechTemplate = () => (
     <div className="bg-slate-950 text-white font-sans min-h-full selection:bg-cyan-500 selection:text-black">
       <section className="p-12 md:p-32 text-center min-h-[80vh] flex flex-col justify-center items-center relative overflow-hidden">
@@ -195,6 +209,8 @@ export default function SiteBuilderPage() {
         <p className="text-slate-400 max-w-xl mb-12">{siteData.hero.value}</p>
         <button className={`px-12 py-4 rounded-full border ${accent.split(' ')[1]} ${accent.split(' ')[0]} font-black uppercase hover:bg-white hover:text-black transition-all`}>Initialize</button>
       </section>
+      
+      {/* IMPACT */}
       <section className="p-12 md:p-24 border-t border-white/5">
          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
@@ -211,6 +227,8 @@ export default function SiteBuilderPage() {
             </div>
          </div>
       </section>
+
+      {/* SKILLS & EXPERIENCE */}
       <section className="p-12 md:p-24 grid grid-cols-1 md:grid-cols-2 gap-20 border-t border-white/5">
         <div>
           <h3 className="text-2xl font-black uppercase mb-8 flex items-center gap-3"><Zap size={24} className={accent.split(' ')[0]}/> Tech Stack</h3>
@@ -238,6 +256,8 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
+
+      {/* PROJECTS & INSIGHTS (Static Headers) */}
       <section className="p-12 md:p-24 border-t border-white/5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
            <div>
@@ -264,6 +284,8 @@ export default function SiteBuilderPage() {
            </div>
         </div>
       </section>
+
+      {/* TESTIMONIALS & EDUCATION (Static Headers) */}
       <section className="p-12 md:p-24 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-12">
          <div className="p-8 bg-gradient-to-br from-white/10 to-transparent rounded-3xl border border-white/5">
             <Quote size={30} className={`mb-4 ${accent.split(' ')[0]}`}/>
@@ -281,6 +303,7 @@ export default function SiteBuilderPage() {
             ))}
          </div>
       </section>
+
       <section className="p-12 md:p-32 text-center border-t border-white/5 bg-black">
         <div className="max-w-2xl mx-auto p-12 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-xl">
           <h2 className="text-4xl font-black uppercase mb-6">{siteData.contact.header}</h2>
@@ -297,6 +320,9 @@ export default function SiteBuilderPage() {
     </div>
   );
 
+  // ---------------------------------------------------------------------------
+  // 🟫 TEMPLATE 3: CREATIVE
+  // ---------------------------------------------------------------------------
   const CreativeTemplate = () => (
     <div className="bg-[#fdfbf7] text-stone-800 font-sans min-h-full">
       <section className="p-12 md:p-32 text-center min-h-[70vh] flex flex-col justify-center items-center">
@@ -394,7 +420,7 @@ export default function SiteBuilderPage() {
     <div className="min-h-screen bg-zinc-950 text-white pt-28 pb-10 px-6 font-sans">
       <div className="max-w-[1900px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-140px)]">
         
-        {/* --- LEFT: SCROLLABLE EDITOR SIDEBAR --- */}
+        {/* SIDEBAR */}
         <div className="lg:col-span-4 flex flex-col gap-6 overflow-hidden">
           <div className="flex items-center justify-between bg-zinc-900 p-2 rounded-2xl border border-white/5">
             <Link href="/dashboard" className="flex items-center gap-2 text-[10px] font-black uppercase text-zinc-500 hover:text-white px-4">
@@ -412,7 +438,6 @@ export default function SiteBuilderPage() {
           </div>
 
           <div className="flex-1 overflow-y-auto pr-2 space-y-6 custom-scrollbar">
-            {/* Color Palette */}
             <div className="bg-zinc-900 border border-white/10 p-6 rounded-[2rem]">
                <p className="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-4 flex items-center gap-2"><Palette size={12}/> Color Engine</p>
                <div className="flex justify-between">
@@ -424,10 +449,7 @@ export default function SiteBuilderPage() {
                </div>
             </div>
 
-            {/* 12 SECTIONS EDITOR */}
             <div className="bg-zinc-900 border border-white/10 rounded-[2rem] p-8 space-y-10">
-              
-              {/* 1. HERO */}
               <div className="space-y-4">
                 <h3 className="text-xs font-black uppercase text-cyan-400">1. Hero Identity</h3>
                 <input value={siteData.hero.name} onChange={(e)=>handleUpdate('hero','name',e.target.value)} placeholder="Full Name" className="w-full bg-black border border-white/10 rounded-xl p-4 text-sm" />
@@ -435,13 +457,11 @@ export default function SiteBuilderPage() {
                 <textarea value={siteData.hero.value} onChange={(e)=>handleUpdate('hero','value',e.target.value)} placeholder="Value Proposition" className="w-full bg-black border border-white/10 rounded-xl p-4 text-sm resize-none h-20" />
               </div>
 
-              {/* 2. ABOUT */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <h3 className="text-xs font-black uppercase text-cyan-400">2. About</h3>
                 <textarea value={siteData.about.bio} onChange={(e)=>handleUpdate('about','bio',e.target.value)} placeholder="Bio" className="w-full bg-black border border-white/10 rounded-xl p-4 text-sm resize-none h-28" />
               </div>
 
-              {/* 3. IMPACT (List) */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">3. Impact</h3><button onClick={()=>addListItem('impact', {label:'', val:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.impact.map((i, idx) => (
@@ -453,7 +473,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 4. SKILLS (List) */}
+              {/* SKILLS */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">4. Skills</h3><button onClick={()=>addListItem('skills', {cat:'', val:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.skills.map((s, idx) => (
@@ -465,7 +485,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 5. EXPERIENCE (List) */}
+              {/* EXPERIENCE */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">5. Experience</h3><button onClick={()=>addListItem('experience', {role:'', org:'', time:'', desc:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.experience.map((e, idx) => (
@@ -479,7 +499,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 6. PROJECTS (List) */}
+              {/* PROJECTS */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">6. Projects</h3><button onClick={()=>addListItem('projects', {name:'', outcome:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.projects.map((p, idx) => (
@@ -491,7 +511,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 7. INSIGHTS (List) */}
+              {/* INSIGHTS */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">7. Insights</h3><button onClick={()=>addListItem('insights', {title:'', link:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.insights.map((ins, idx) => (
@@ -502,7 +522,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 8. TESTIMONIALS (List) */}
+              {/* TESTIMONIALS */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">8. Testimonials</h3><button onClick={()=>addListItem('testimonials', {quote:'', author:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.testimonials.map((t, idx) => (
@@ -513,7 +533,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 9. EDUCATION (List) */}
+              {/* EDUCATION */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between"><h3 className="text-xs font-black uppercase text-cyan-400">9. Education</h3><button onClick={()=>addListItem('education', {degree:'', school:'', year:''})} className="text-cyan-400"><Plus size={14}/></button></div>
                 {siteData.education.map((edu, idx) => (
@@ -526,7 +546,7 @@ export default function SiteBuilderPage() {
                 ))}
               </div>
 
-              {/* 10-12. FOOTER ACTIONS */}
+              {/* FOOTER ACTIONS */}
               <div className="space-y-4 pt-6 border-t border-white/5">
                 <h3 className="text-xs font-black uppercase text-cyan-400">10-12. Final Actions</h3>
                 <input value={siteData.resume.cta} onChange={(e)=>handleUpdate('resume','cta',e.target.value)} placeholder="Resume CTA" className="w-full bg-black border border-white/10 rounded-xl p-4 text-xs" />
@@ -541,7 +561,7 @@ export default function SiteBuilderPage() {
           </button>
         </div>
 
-        {/* --- RIGHT: PREVIEW AREA --- */}
+        {/* --- PREVIEW AREA --- */}
         <div className="lg:col-span-8 bg-zinc-900/40 rounded-[3rem] border border-white/5 p-12 flex justify-center overflow-y-auto relative">
            <div className={`transition-all duration-700 shadow-2xl overflow-y-auto custom-scrollbar relative ${view === 'desktop' ? 'w-full max-w-[1400px] h-full rounded-[3rem]' : 'w-[375px] h-[650px] rounded-[4rem] border-[12px] border-zinc-800'}`}>
              {template === 'executive' ? <ExecutiveTemplate /> : template === 'tech' ? <TechTemplate /> : <CreativeTemplate />}
