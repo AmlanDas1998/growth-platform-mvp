@@ -1,200 +1,321 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { 
-  History, Target, Layers, Zap, 
-  TrendingUp, Clock, ShieldCheck, PieChart,
-  Calculator, Info, Landmark
+  TrendingUp, ShieldCheck, Clock, DollarSign, 
+  PieChart, BookOpen, AlertTriangle, CheckCircle2, 
+  ChevronDown, ChevronRight, Calculator, ArrowRight 
 } from 'lucide-react';
+import Link from 'next/link';
 
-// --- TYPES & DATA ---
-type ThemeKey = 'blue' | 'dark' | 'rose' | 'emerald';
+export default function SIPGuidePage() {
+  // --- SCROLL PROGRESS INDICATOR ---
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
-const themes: Record<ThemeKey, string> = {
-  blue: "from-blue-600 to-indigo-700 shadow-blue-500/20",
-  dark: "from-slate-800 to-black shadow-slate-500/20",
-  rose: "from-rose-500 to-orange-500 shadow-rose-500/20",
-  emerald: "from-emerald-500 to-teal-600 shadow-emerald-500/20"
-};
+  // --- NAVIGATION SECTIONS ---
+  const sections = [
+    { id: "what-is-sip", title: "What is SIP?" },
+    { id: "features", title: "Key Features" },
+    { id: "how-it-works", title: "How it Works" },
+    { id: "compounding", title: "Power of Compounding" },
+    { id: "comparison", title: "SIP vs Lump Sum" },
+    { id: "types", title: "Types of Funds" },
+    { id: "risks", title: "Safety & Risks" },
+    { id: "faq", title: "FAQs" }
+  ];
 
-export default function SIPEducationPage() {
-  // Calculator States
-  const [monthlyInvest, setMonthlyInvest] = useState(5000);
-  const [rate, setRate] = useState(12);
-  const [years, setYears] = useState(10);
-  const [results, setResults] = useState({ totalInvest: 0, estReturns: 0, totalValue: 0 });
-
-  // Calculation Logic: FV = P × [({1 + i}^n - 1) / i] × (1 + i)
-  useEffect(() => {
-    const i = rate / 12 / 100; // monthly rate
-    const n = years * 12; // total months
-    const totalValue = monthlyInvest * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
-    const totalInvest = monthlyInvest * n;
-    
-    setResults({
-      totalInvest: Math.round(totalInvest),
-      estReturns: Math.round(totalValue - totalInvest),
-      totalValue: Math.round(totalValue)
-    });
-  }, [monthlyInvest, rate, years]);
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-cyan-500/30 pb-32">
+    <div className="min-h-screen bg-zinc-950 text-zinc-300 font-sans selection:bg-cyan-500 selection:text-black">
       
-      {/* --- ACT I: ORIGIN & PHILOSOPHY --- */}
-      <section className="pt-40 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px] -z-10" />
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-white/5 text-[10px] font-black tracking-[0.4em] uppercase text-cyan-400 mb-8">
-              <History size={14} /> The Origin
-            </div>
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none italic uppercase">
-              SIP <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Mechanics.</span>
-            </h1>
-            <p className="text-xl text-slate-400 leading-relaxed font-light mt-8 max-w-lg">
-              A **Systematic Investment Plan (SIP)** is a disciplined method of investing a fixed amount regularly into a mutual fund scheme. 
-              It is the primary tool for building multi-generational wealth in **Pune**.
-            </p>
-          </motion.div>
-          <div className="bg-zinc-900/50 backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5">
-             <div className="flex items-center gap-4 text-cyan-400 mb-6"><Target size={32} /><h3 className="text-2xl font-black italic">Core Goal</h3></div>
-             <p className="text-slate-400 leading-relaxed italic text-lg mb-8">"Consistency beats timing every single time."</p>
-             <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
-                <div><h4 className="text-[10px] font-black uppercase text-slate-500 mb-2">Technique</h4><p className="font-bold">Rupee Cost Averaging</p></div>
-                <div><h4 className="text-[10px] font-black uppercase text-slate-500 mb-2">Engine</h4><p className="font-bold">Exponential Compounding</p></div>
-             </div>
-          </div>
-        </div>
-      </section>
+      {/* SCROLL PROGRESS BAR */}
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-cyan-500 origin-left z-50" style={{ scaleX }} />
 
-      {/* --- ACT II: HOW IT WORKS --- */}
-      <section className="py-24 px-6 bg-white/5 border-y border-white/5">
-        <div className="max-w-7xl mx-auto space-y-20">
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl font-black tracking-tighter italic uppercase italic">The Growth Engine</h2>
-            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em]">Strategic Wealth Building</p>
+      {/* --- HERO SECTION --- */}
+      <header className="relative pt-32 pb-20 px-6 border-b border-white/5 bg-gradient-to-b from-zinc-900 to-zinc-950">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-6">
+            <BookOpen size={14} /> Student Finance Academy
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { step: "01", title: "Monthly Discipline", detail: "Automatic deductions ensure your investment happens before your lifestyle expenses." },
-              { step: "02", title: "Cost Averaging", detail: "Buy more units when prices dip, lowering your average cost per unit over time." },
-              { step: "03", title: "Wealth Snowball", detail: "Reinvested returns begin earning their own returns, creating exponential growth." }
-            ].map((item) => (
-              <div key={item.step} className="p-10 rounded-[3rem] bg-black border border-white/10 hover:border-cyan-500/50 transition-all group">
-                <span className="text-6xl font-black text-white/5 group-hover:text-cyan-500/20 transition-colors block mb-6 italic">{item.step}</span>
-                <h3 className="text-xl font-black mb-4 tracking-tight">{item.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed font-light">{item.detail}</p>
-              </div>
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-8">
+            Systematic Investment Plan <span className="text-zinc-500">(SIP)</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
+            The complete guide for <span className="text-white font-bold">Students & Young Professionals</span> to master wealth creation through disciplined investing.
+          </p>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col lg:flex-row gap-16">
+        
+        {/* --- LEFT: STICKY TABLE OF CONTENTS (Desktop) --- */}
+        <aside className="hidden lg:block w-64 shrink-0">
+          <div className="sticky top-32 space-y-2 border-l-2 border-white/5 pl-6">
+            <h4 className="text-xs font-black uppercase tracking-widest text-white mb-6">Contents</h4>
+            {sections.map((section) => (
+              <button 
+                key={section.id} 
+                onClick={() => scrollToSection(section.id)}
+                className="block text-sm text-zinc-500 hover:text-cyan-400 hover:translate-x-1 transition-all text-left py-1"
+              >
+                {section.title}
+              </button>
             ))}
+            <div className="pt-8">
+              <button className="w-full py-3 bg-white text-black font-bold uppercase text-xs tracking-widest rounded-xl hover:bg-cyan-400 transition-colors">
+                Start Investing
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </aside>
 
-      {/* --- ACT III: INTERACTIVE CALCULATOR --- */}
-      <section id="calculator" className="py-32 px-6 relative">
-        <div className="max-w-7xl mx-auto space-y-20">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+        {/* --- RIGHT: MAIN CONTENT --- */}
+        <main className="flex-1 space-y-24">
+
+          {/* 1. WHAT IS SIP */}
+          <section id="what-is-sip" className="space-y-6">
+            <h2 className="text-3xl md:text-4xl font-black text-white">What is a Systematic Investment Plan?</h2>
+            <div className="p-8 rounded-3xl bg-zinc-900 border border-white/5 space-y-6">
+              <p className="text-lg leading-relaxed">
+                A <strong className="text-white">Systematic Investment Plan (SIP)</strong> is a disciplined way of investing a fixed amount of money at regular intervals — typically monthly — into a mutual fund scheme. Think of it as a <span className="text-cyan-400">Recurring Deposit (RD)</span> for the stock market, but with potentially higher returns.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-black/40 rounded-xl border border-white/5">
+                  <h4 className="text-white font-bold mb-2">Not a Product</h4>
+                  <p className="text-sm">SIP is not an investment product itself. It is a <em className="text-zinc-400">method</em> of investing in mutual funds.</p>
+                </div>
+                <div className="p-4 bg-black/40 rounded-xl border border-white/5">
+                  <h4 className="text-white font-bold mb-2">Regulated by SEBI</h4>
+                  <p className="text-sm">Managed by registered Asset Management Companies (AMCs) and regulated strictly by SEBI.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 2. KEY FEATURES */}
+          <section id="features">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-8">Key Features</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { icon: DollarSign, title: "Affordable", desc: "Start with as low as ₹500/month." },
+                { icon: Clock, title: "Automated", desc: "Auto-debit from bank on a fixed date." },
+                { icon: TrendingUp, title: "Market Linked", desc: "High growth potential over long term." },
+                { icon: ShieldCheck, title: "Flexible", desc: "Stop, pause, or increase anytime." },
+                { icon: PieChart, title: "Disciplined", desc: "Builds financial habit early." },
+                { icon: Calculator, title: "Compounding", desc: "Earn returns on your returns." }
+              ].map((feat, i) => (
+                <div key={i} className="p-6 rounded-2xl bg-zinc-900/50 border border-white/5 hover:border-cyan-500/30 transition-colors">
+                  <feat.icon className="text-cyan-400 mb-4" size={24} />
+                  <h3 className="text-lg font-bold text-white mb-2">{feat.title}</h3>
+                  <p className="text-sm text-zinc-500">{feat.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* 3. HOW IT WORKS & RCA */}
+          <section id="how-it-works" className="space-y-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-6">How SIP Works</h2>
+              <ol className="relative border-l border-zinc-800 ml-4 space-y-8">
+                <li className="pl-8 relative">
+                  <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-zinc-800 border border-zinc-600" />
+                  <h4 className="text-xl font-bold text-white">Auto-Debit</h4>
+                  <p className="mt-2">Your bank account is debited on a specific date (e.g., 5th of every month).</p>
+                </li>
+                <li className="pl-8 relative">
+                  <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-zinc-800 border border-zinc-600" />
+                  <h4 className="text-xl font-bold text-white">Unit Purchase</h4>
+                  <p className="mt-2">Money is used to buy Mutual Fund units at the current Net Asset Value (NAV).</p>
+                </li>
+                <li className="pl-8 relative">
+                  <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+                  <h4 className="text-xl font-bold text-white">Rupee Cost Averaging</h4>
+                  <p className="mt-2 text-zinc-400">
+                    If markets fall, you buy <strong className="text-white">more units</strong>.<br/>
+                    If markets rise, you buy <strong className="text-white">fewer units</strong>.<br/>
+                    This averages out your purchase cost over time, reducing risk.
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          {/* 4. COMPOUNDING EXAMPLE */}
+          <section id="compounding" className="p-10 rounded-[2.5rem] bg-gradient-to-br from-zinc-900 to-black border border-white/10">
+            <div className="flex flex-col md:flex-row items-center gap-12">
+              <div className="flex-1 space-y-6">
+                <h2 className="text-3xl font-black text-white">The Power of Compounding</h2>
+                <p>Starting early is your biggest advantage. Even small amounts can grow massively over time.</p>
+                
+                <div className="space-y-4 pt-4">
+                  <div className="flex justify-between items-center p-4 bg-white/5 rounded-xl">
+                    <span className="text-sm uppercase tracking-widest">Monthly Investment</span>
+                    <span className="font-mono text-xl text-white">₹5,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-4 bg-white/5 rounded-xl">
+                    <span className="text-sm uppercase tracking-widest">Duration</span>
+                    <span className="font-mono text-xl text-white">20 Years</span>
+                  </div>
+                  <div className="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-cyan-500/30">
+                    <span className="text-sm uppercase tracking-widest text-cyan-400">Wealth Created</span>
+                    <span className="font-mono text-2xl font-bold text-cyan-400">~ ₹49.95 Lakhs</span>
+                  </div>
+                </div>
+                <p className="text-xs text-zinc-600">*Assumed rate of return: 12% p.a.</p>
+              </div>
+              
+              <div className="w-full md:w-1/2 p-8 bg-zinc-950 rounded-3xl border border-white/5 text-center">
+                <h3 className="text-lg font-bold text-white mb-6">Why Start at 22 vs 30?</h3>
+                <div className="flex justify-around items-end h-48 gap-4">
+                  <div className="w-20 bg-zinc-800 rounded-t-xl relative group h-[60%]">
+                    <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 text-xs font-bold">Start 30</span>
+                  </div>
+                  <div className="w-20 bg-cyan-500 rounded-t-xl relative group h-[100%] shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                    <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 text-xs font-bold text-cyan-400">Start 22</span>
+                  </div>
+                </div>
+                <p className="mt-6 text-sm text-zinc-400">Delaying by just 8 years can cost you <span className="text-white font-bold">over 50%</span> of your final corpus.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. COMPARISON TABLE */}
+          <section id="comparison">
+            <h2 className="text-3xl font-black text-white mb-8">SIP vs Lump Sum</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-zinc-500">Factor</th>
+                    <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-cyan-400">SIP (Recommended)</th>
+                    <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-white">Lump Sum</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {[
+                    { factor: "Market Timing", sip: "Not Required", lump: "High Risk" },
+                    { factor: "Volatility", sip: "Smoothed Out (Averaging)", lump: "Immediate Impact" },
+                    { factor: "Capital Needed", sip: "Low (₹500+)", lump: "High Surplus" },
+                    { factor: "Discipline", sip: "Automatic Habit", lump: "Manual Effort" },
+                  ].map((row, i) => (
+                    <tr key={i} className="hover:bg-white/5 transition-colors">
+                      <td className="py-4 px-6 font-medium text-white">{row.factor}</td>
+                      <td className="py-4 px-6 text-cyan-300">{row.sip}</td>
+                      <td className="py-4 px-6 text-zinc-500">{row.lump}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* 6. FUND TYPES & GOALS */}
+          <section id="types" className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div>
+              <h2 className="text-3xl font-black text-white mb-6">Fund Types</h2>
+              <ul className="space-y-4">
+                {[
+                  { name: "Equity Funds", desc: "High risk, high return. Best for long term (>5 years)." },
+                  { name: "Debt Funds", desc: "Lower risk, stable returns. Good for short term." },
+                  { name: "Hybrid Funds", desc: "Mix of equity and debt for balanced growth." },
+                  { name: "Index Funds", desc: "Passive funds tracking Nifty/Sensex. Low cost." },
+                  { name: "ELSS Funds", desc: "Tax-saving funds with 3-year lock-in." }
+                ].map((fund, i) => (
+                  <li key={i} className="group">
+                    <h4 className="text-white font-bold group-hover:text-cyan-400 transition-colors">{fund.name}</h4>
+                    <p className="text-sm text-zinc-500">{fund.desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-3xl font-black text-white mb-6">Achievable Goals</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {["Higher Education", "International MBA", "Emergency Fund", "First Home", "World Travel", "Retirement"].map((goal, i) => (
+                  <div key={i} className="p-4 border border-white/5 rounded-xl text-center hover:bg-white/5 transition-colors">
+                    <span className="text-sm font-bold text-zinc-300">{goal}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 7. TAXATION & SAFETY */}
+          <section id="risks" className="space-y-8">
+            <div className="p-8 bg-rose-950/10 border border-rose-500/20 rounded-2xl">
+              <h3 className="flex items-center gap-2 text-xl font-bold text-rose-400 mb-4">
+                <AlertTriangle size={20} /> Risks & Safety
+              </h3>
+              <p className="mb-4">
+                Mutual funds are <strong className="text-white">not guaranteed</strong>. Returns depend on market performance. SIP reduces risk through averaging but does not eliminate it. Always align investments with your risk appetite.
+              </p>
+            </div>
+            
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-fuchsia-500">
-                <Calculator size={20} />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em]">Precision Tools</span>
-              </div>
-              <h2 className="text-6xl font-black tracking-tighter italic uppercase italic">Wealth Lab.</h2>
+              <h3 className="text-xl font-bold text-white">Taxation (Equity Funds)</h3>
+              <ul className="list-disc pl-5 space-y-2 text-zinc-400">
+                <li><strong className="text-white">STCG (Short Term):</strong> 15% if sold within 1 year.</li>
+                <li><strong className="text-white">LTCG (Long Term):</strong> 10% on gains exceeding ₹1 Lakh if sold after 1 year.</li>
+              </ul>
+              <p className="text-xs text-zinc-600">Note: Tax laws differ for Debt funds and are subject to change.</p>
             </div>
-            <p className="max-w-md text-slate-500 text-sm leading-relaxed font-medium">
-              Project your financial future. Adjust the parameters to see how small monthly changes impact your terminal value.
-            </p>
-          </div>
+          </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Input Controls */}
-            <div className="lg:col-span-5 space-y-12 bg-white/5 backdrop-blur-3xl p-10 md:p-14 rounded-[4rem] border border-white/10">
-              {/* Slider: Monthly Investment */}
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Monthly Investment</label>
-                  <span className="text-2xl font-black text-cyan-400 italic">₹{monthlyInvest.toLocaleString()}</span>
-                </div>
-                <input 
-                  type="range" min="500" max="100000" step="500" 
-                  value={monthlyInvest} onChange={(e) => setMonthlyInvest(Number(e.target.value))}
-                  className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-                />
-              </div>
-
-              {/* Slider: Return Rate */}
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Expected Return (p.a.)</label>
-                  <span className="text-2xl font-black text-fuchsia-500 italic">{rate}%</span>
-                </div>
-                <input 
-                  type="range" min="1" max="30" step="0.5" 
-                  value={rate} onChange={(e) => setRate(Number(e.target.value))}
-                  className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-fuchsia-500"
-                />
-              </div>
-
-              {/* Slider: Time Period */}
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Time Period</label>
-                  <span className="text-2xl font-black text-indigo-400 italic">{years} Years</span>
-                </div>
-                <input 
-                  type="range" min="1" max="40" 
-                  value={years} onChange={(e) => setYears(Number(e.target.value))}
-                  className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-                />
-              </div>
+          {/* 8. FAQ SECTION */}
+          <section id="faq" className="space-y-8">
+            <h2 className="text-3xl font-black text-white">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {[
+                { q: "Is SIP safe for beginners?", a: "Yes, it is the safest entry point as it minimizes the risk of timing the market wrong." },
+                { q: "Can I stop my SIP anytime?", a: "Yes, there are no penalties for stopping a SIP in open-ended funds. You can pause or stop anytime." },
+                { q: "What is the minimum amount?", a: "You can start with as little as ₹500 per month." },
+                { q: "What if I miss a payment?", a: "Usually, the SIP for that month is skipped. Consecutive misses might cancel the mandate, but no penalty is charged by the fund house." },
+                { q: "Better than Fixed Deposit (FD)?", a: "Potential returns are higher (10-15%) compared to FDs (6-7%), but SIPs carry market risk while FDs are guaranteed." },
+              ].map((item, i) => (
+                <details key={i} className="group p-6 bg-zinc-900 rounded-2xl border border-white/5 open:bg-zinc-800 transition-colors">
+                  <summary className="flex justify-between items-center font-bold text-white cursor-pointer list-none">
+                    {item.q}
+                    <ChevronDown className="group-open:rotate-180 transition-transform" size={16} />
+                  </summary>
+                  <p className="mt-4 text-zinc-400 leading-relaxed">{item.a}</p>
+                </details>
+              ))}
             </div>
+          </section>
 
-            {/* Visual Results */}
-            <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-10 rounded-[3.5rem] bg-zinc-900 border border-white/5 flex flex-col justify-between">
-                <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Total Invested</h4>
-                  <p className="text-4xl font-black tracking-tight italic">₹{results.totalInvest.toLocaleString()}</p>
-                </div>
-                <div className="pt-8 border-t border-white/5 mt-8">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Est. Returns</h4>
-                  <p className="text-4xl font-black tracking-tight text-emerald-400 italic">+ ₹{results.estReturns.toLocaleString()}</p>
-                </div>
-              </div>
+          {/* DISCLAIMER */}
+          <footer className="pt-12 border-t border-white/10 text-[10px] text-zinc-600 text-justify leading-relaxed">
+            <p className="uppercase font-bold mb-2 tracking-widest">Regulatory Disclaimer</p>
+            Mutual Fund investments are subject to market risks, read all scheme related documents carefully. Past performance is not indicative of future returns. The information provided above is for educational purposes only and should not be considered as investment advice. Investors should assess their financial goals and risk appetite before investing.
+          </footer>
 
-              <div className="p-10 rounded-[3.5rem] bg-gradient-to-br from-cyan-600 to-blue-800 border border-white/10 flex flex-col justify-center items-center text-center space-y-6 shadow-2xl">
-                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md mb-4">
-                    <TrendingUp size={32} className="text-white" />
-                 </div>
-                 <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-cyan-100">Total Value</h4>
-                 <p className="text-5xl font-black tracking-tighter italic">₹{results.totalValue.toLocaleString()}</p>
-                 <button className="px-8 py-3 bg-white text-black rounded-full font-black text-[9px] uppercase tracking-widest hover:bg-black hover:text-white transition-all">
-                    Start Investing
-                 </button>
-              </div>
-            </div>
+        </main>
+      </div>
+
+      {/* CTA FOOTER */}
+      <div className="sticky bottom-0 border-t border-white/10 bg-zinc-950/80 backdrop-blur-lg p-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-white font-bold">Ready to build wealth?</p>
+            <p className="text-xs text-zinc-500">Start your journey with Avir Toya today.</p>
           </div>
+          <button className="flex items-center gap-2 px-8 py-3 bg-white text-black font-black uppercase tracking-widest rounded-full hover:bg-cyan-400 transition-colors">
+            Start SIP <ArrowRight size={16} />
+          </button>
         </div>
-      </section>
-
-      {/* --- ACT IV: BOUTIQUE FOOTER --- */}
-      <footer className="max-w-7xl mx-auto px-6 pt-32 grid grid-cols-1 md:grid-cols-3 gap-20 border-t border-white/5 opacity-60">
-        <div className="space-y-6">
-          <div className="flex items-center gap-2 text-xl font-black tracking-tighter italic uppercase">
-            <Zap size={18} className="text-cyan-400" /> Amlan Das Platform
-          </div>
-          <p className="text-xs text-slate-500 leading-relaxed font-medium">Boutique wealth engineering and professional growth for the modern student in Pune.</p>
-        </div>
-        <div className="space-y-6">
-          <h5 className="text-[10px] font-black uppercase tracking-widest text-indigo-400">The Mission</h5>
-          <p className="text-xs text-slate-500 leading-relaxed">Bridging the gap between institutional education and professional financial mastery.</p>
-        </div>
-        <div className="space-y-6">
-           <h5 className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Support</h5>
-           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Calculations based on 100% equity model. Actual returns may vary.</p>
-        </div>
-      </footer>
+      </div>
 
     </div>
   );
