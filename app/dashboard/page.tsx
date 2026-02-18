@@ -8,33 +8,23 @@ import {
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  // --- FIX: Using 'as const' to satisfy strict TypeScript Easing types ---
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
-        duration: 0.6, 
-        ease: "easeOut" as const // Standard literal type assertion
-      } 
-    }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: { staggerChildren: 0.1 } 
-    }
-  };
+  // --- BUILD-SAFE ANIMATION SETTINGS ---
+  // Using direct objects instead of complex nested variants to satisfy TypeScript
+  const initialOpacity = { opacity: 0, y: 20 };
+  const animateOpacity = { opacity: 1, y: 0 };
+  const transitionSettings = { duration: 0.6, ease: "easeOut" };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white pt-32 pb-20 px-6 font-sans">
       <div className="max-w-[1600px] mx-auto space-y-16">
         
         {/* --- HERO: WELCOME LAYER --- */}
-        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="space-y-4">
+        <motion.div 
+          initial={initialOpacity} 
+          animate={animateOpacity} 
+          transition={transitionSettings}
+          className="space-y-4"
+        >
           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.5em] text-cyan-400 opacity-80">
             <Zap size={12} /> Pune Professional Ecosystem
           </div>
@@ -47,14 +37,15 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* --- CORE ENGINES: THE 3 TILES --- */}
-        <motion.div 
-          initial="hidden" animate="visible" variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
           {/* 1. CV BUILDER TILE */}
           <Link href="/cv-builder">
             <motion.div 
-              variants={fadeInUp} whileHover={{ y: -8, borderColor: 'rgba(6,182,212,0.3)' }}
+              initial={initialOpacity}
+              animate={animateOpacity}
+              transition={{ delay: 0.1, ...transitionSettings }}
+              whileHover={{ y: -8, borderColor: 'rgba(6,182,212,0.3)' }}
               className="group h-full p-10 rounded-[3rem] bg-zinc-900 border border-white/5 transition-all relative overflow-hidden flex flex-col justify-between"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -80,7 +71,10 @@ export default function DashboardPage() {
           {/* 2. WEBSITE BUILDER TILE */}
           <Link href="/site-builder">
             <motion.div 
-              variants={fadeInUp} whileHover={{ y: -8, borderColor: 'rgba(16,185,129,0.3)' }}
+              initial={initialOpacity}
+              animate={animateOpacity}
+              transition={{ delay: 0.2, ...transitionSettings }}
+              whileHover={{ y: -8, borderColor: 'rgba(16,185,129,0.3)' }}
               className="group h-full p-10 rounded-[3rem] bg-zinc-900 border border-white/5 transition-all relative overflow-hidden flex flex-col justify-between"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -106,7 +100,10 @@ export default function DashboardPage() {
           {/* 3. PROFILE BUILDER TILE */}
           <Link href="/profile">
             <motion.div 
-              variants={fadeInUp} whileHover={{ y: -8, borderColor: 'rgba(59,130,246,0.3)' }}
+              initial={initialOpacity}
+              animate={animateOpacity}
+              transition={{ delay: 0.3, ...transitionSettings }}
+              whileHover={{ y: -8, borderColor: 'rgba(59,130,246,0.3)' }}
               className="group h-full p-10 rounded-[3rem] bg-zinc-900 border border-white/5 transition-all relative overflow-hidden flex flex-col justify-between"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -128,13 +125,11 @@ export default function DashboardPage() {
               </div>
             </motion.div>
           </Link>
-        </motion.div>
+
+        </div>
 
         {/* --- STATS SECTION --- */}
-        <motion.div 
-          initial="hidden" animate="visible" variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[
             { label: 'Total Views', val: '1.2k', icon: Eye, color: 'text-blue-400' },
             { label: 'CV Exports', val: '48', icon: Download, color: 'text-amber-400' },
@@ -142,7 +137,10 @@ export default function DashboardPage() {
             { label: 'Network', val: '14', icon: Users, color: 'text-rose-400' }
           ].map((stat, i) => (
             <motion.div 
-              key={i} variants={fadeInUp}
+              key={i} 
+              initial={initialOpacity}
+              animate={animateOpacity}
+              transition={{ delay: 0.4 + (i * 0.1), ...transitionSettings }}
               className="p-8 rounded-[2rem] bg-zinc-900/50 border border-white/5 flex flex-col gap-4"
             >
               <stat.icon size={20} className={stat.color} />
@@ -152,11 +150,11 @@ export default function DashboardPage() {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         <footer className="pt-20 border-t border-white/5 flex justify-between items-center text-zinc-700">
           <p className="text-[10px] font-black uppercase tracking-[0.5em]">
-            Amlan Das Boutique Career Ecosystem
+            Boutique Career Ecosystem
           </p>
         </footer>
 
