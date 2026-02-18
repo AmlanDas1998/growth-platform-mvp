@@ -8,13 +8,16 @@ import {
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  // --- FIX: Build-safe Animation Variants ---
+  // --- FIX: Using 'as const' to satisfy strict TypeScript Easing types ---
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.6, ease: "easeOut" } // Standard easing to avoid Type errors
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut" as const // Standard literal type assertion
+      } 
     }
   };
 
@@ -153,7 +156,7 @@ export default function DashboardPage() {
 
         <footer className="pt-20 border-t border-white/5 flex justify-between items-center text-zinc-700">
           <p className="text-[10px] font-black uppercase tracking-[0.5em]">
-            Boutique Career Ecosystem
+            Amlan Das Boutique Career Ecosystem
           </p>
         </footer>
 
