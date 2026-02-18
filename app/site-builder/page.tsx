@@ -13,7 +13,6 @@ import Link from 'next/link';
 type TemplateId = 'executive' | 'tech' | 'creative';
 type PaletteId = 'classic' | 'modern' | 'executive' | 'tech' | 'rose';
 
-// Palettes now act as "Accents" on top of the strict Template Backgrounds
 const accentColors: Record<PaletteId, string> = {
   classic: 'text-slate-600 border-slate-600 bg-slate-900',
   modern: 'text-emerald-500 border-emerald-500 bg-emerald-500',
@@ -27,13 +26,11 @@ export default function SiteBuilderPage() {
   const [palette, setPalette] = useState<PaletteId>('executive');
   const [view, setView] = useState<'desktop' | 'mobile'>('desktop');
   const [isSaved, setIsSaved] = useState(false);
-  
   const accent = accentColors[palette];
 
-  // --- 12-SECTION DATA ---
   const [siteData, setSiteData] = useState({
     hero: { name: "Amlan Das", title: "Strategy & Operations Lead", value: "Building scalable financial ecosystems for the next generation." },
-    about: { header: "About Me", sub: "Professional Profile", bio: "Experienced professional with a focus on delivering impactful results in NBFC operations and credit strategy. I combine financial acumen with operational excellence." },
+    about: { header: "About Me", sub: "Professional Profile", bio: "Experienced professional with a focus on delivering impactful results in NBFC operations and credit strategy." },
     impact: [{ label: "Revenue Managed", val: "$10M+" }, { label: "Growth YoY", val: "35%" }, { label: "Teams Led", val: "4" }],
     skills: [{ cat: "Core", val: "Strategic Planning" }, { cat: "Tech", val: "Financial Modeling" }, { cat: "Tools", val: "Tableau, Excel" }],
     experience: [{ role: "Founder", org: "Avir Toya", time: "2025-Present", desc: "Leading a boutique career platform." }],
@@ -46,7 +43,6 @@ export default function SiteBuilderPage() {
     footer: { tagline: "Building with Precision", social: "LinkedIn" }
   });
 
-  // --- HANDLERS ---
   const handleUpdate = (section: string, field: string, value: any) => {
     setSiteData({ ...siteData, [section]: { ...(siteData as any)[section], [field]: value } });
   };
@@ -64,12 +60,8 @@ export default function SiteBuilderPage() {
     setSiteData({ ...siteData, [section]: newList });
   };
 
-  // ---------------------------------------------------------------------------
-  // 🎨 TEMPLATE 1: MINIMAL EXECUTIVE (Clean, White, Structure)
-  // ---------------------------------------------------------------------------
   const ExecutiveTemplate = () => (
     <div className="bg-white text-slate-800 font-sans min-h-full">
-      {/* 1. HERO */}
       <section className="p-12 md:p-24 border-b border-slate-100 flex flex-col md:flex-row items-center gap-12">
         <div className="flex-1 space-y-6">
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 leading-tight">{siteData.hero.name}</h1>
@@ -83,7 +75,6 @@ export default function SiteBuilderPage() {
           <User size={48} />
         </div>
       </section>
-
       {/* 2. ABOUT & 3. IMPACT */}
       <section className="p-12 md:p-24 border-b border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-12">
         <div className="md:col-span-7 space-y-6">
@@ -99,7 +90,6 @@ export default function SiteBuilderPage() {
           ))}
         </div>
       </section>
-
       {/* 4. SKILLS & 5. EXPERIENCE */}
       <section className="p-12 md:p-24 border-b border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
@@ -127,7 +117,6 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-
       {/* 6. PROJECTS & 7. INSIGHTS */}
       <section className="p-12 md:p-24 border-b border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
@@ -154,7 +143,6 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-
       {/* 8. TESTIMONIALS & 9. EDUCATION */}
       <section className="p-12 md:p-24 border-b border-slate-100 bg-slate-50/50">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -181,18 +169,16 @@ export default function SiteBuilderPage() {
            </div>
         </div>
       </section>
-
       {/* 10. RESUME, 11. CONTACT & 12. FOOTER */}
-      <section className="p-12 md:p-24 bg-slate-900 text-white text-center space-y-12">
+      <section className="p-12 md:p-24 bg-slate-50 text-center space-y-12">
         <div className="space-y-6">
-          <h2 className="text-4xl font-serif font-bold">{siteData.contact.header}</h2>
-          <p className="text-slate-400">{siteData.contact.sub}</p>
-          <div className="flex justify-center gap-4">
-             <button className={`px-10 py-4 bg-white text-slate-900 font-bold tracking-widest uppercase`}>{siteData.contact.email}</button>
-             <button className={`px-10 py-4 border border-white/20 text-white font-bold tracking-widest uppercase hover:bg-white/10`}>{siteData.resume.cta}</button>
-          </div>
+          <h2 className="text-4xl font-serif font-bold text-slate-900">{siteData.contact.header}</h2>
+          <p className="text-slate-500">{siteData.contact.sub}</p>
+          <button className={`px-10 py-4 ${accent.split(' ')[2]} text-white font-bold tracking-widest uppercase`}>
+            {siteData.contact.email}
+          </button>
         </div>
-        <footer className="pt-12 border-t border-slate-800 flex justify-between text-xs text-slate-500 uppercase tracking-widest">
+        <footer className="pt-12 border-t border-slate-200 flex justify-between text-xs text-slate-400 uppercase tracking-widest">
           <span>{siteData.footer.tagline}</span>
           <span>© 2026 {siteData.hero.name}</span>
         </footer>
@@ -200,25 +186,15 @@ export default function SiteBuilderPage() {
     </div>
   );
 
-  // ---------------------------------------------------------------------------
-  // 🌑 TEMPLATE 2: DARK MODERN TECH (Neon, Glass, Bold)
-  // ---------------------------------------------------------------------------
   const TechTemplate = () => (
     <div className="bg-slate-950 text-white font-sans min-h-full selection:bg-cyan-500 selection:text-black">
-      {/* 1. HERO */}
       <section className="p-12 md:p-32 text-center min-h-[80vh] flex flex-col justify-center items-center relative overflow-hidden">
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] opacity-20 blur-[100px] rounded-full ${accent.split(' ')[2]}`} />
-        <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase mb-6 bg-gradient-to-b from-white to-slate-500 bg-clip-text text-transparent relative z-10">
-          {siteData.hero.name}
-        </h1>
+        <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase mb-6 bg-gradient-to-b from-white to-slate-500 bg-clip-text text-transparent relative z-10">{siteData.hero.name}</h1>
         <p className={`text-xl font-bold tracking-widest uppercase mb-8 ${accent.split(' ')[0]}`}>{siteData.hero.title}</p>
         <p className="text-slate-400 max-w-xl mb-12">{siteData.hero.value}</p>
-        <button className={`px-12 py-4 rounded-full border ${accent.split(' ')[1]} ${accent.split(' ')[0]} font-black uppercase hover:bg-white hover:text-black transition-all`}>
-          Initialize
-        </button>
+        <button className={`px-12 py-4 rounded-full border ${accent.split(' ')[1]} ${accent.split(' ')[0]} font-black uppercase hover:bg-white hover:text-black transition-all`}>Initialize</button>
       </section>
-
-      {/* 2. ABOUT & 3. IMPACT (Glass Cards) */}
       <section className="p-12 md:p-24 border-t border-white/5">
          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
@@ -235,8 +211,6 @@ export default function SiteBuilderPage() {
             </div>
          </div>
       </section>
-
-      {/* 4. SKILLS & 5. EXPERIENCE */}
       <section className="p-12 md:p-24 grid grid-cols-1 md:grid-cols-2 gap-20 border-t border-white/5">
         <div>
           <h3 className="text-2xl font-black uppercase mb-8 flex items-center gap-3"><Zap size={24} className={accent.split(' ')[0]}/> Tech Stack</h3>
@@ -264,8 +238,6 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-
-      {/* 6. PROJECTS & 7. INSIGHTS */}
       <section className="p-12 md:p-24 border-t border-white/5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
            <div>
@@ -292,8 +264,6 @@ export default function SiteBuilderPage() {
            </div>
         </div>
       </section>
-
-      {/* 8. TESTIMONIALS & 9. EDUCATION */}
       <section className="p-12 md:p-24 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-12">
          <div className="p-8 bg-gradient-to-br from-white/10 to-transparent rounded-3xl border border-white/5">
             <Quote size={30} className={`mb-4 ${accent.split(' ')[0]}`}/>
@@ -311,8 +281,6 @@ export default function SiteBuilderPage() {
             ))}
          </div>
       </section>
-
-      {/* 10. RESUME, 11. CONTACT, 12. FOOTER */}
       <section className="p-12 md:p-32 text-center border-t border-white/5 bg-black">
         <div className="max-w-2xl mx-auto p-12 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-xl">
           <h2 className="text-4xl font-black uppercase mb-6">{siteData.contact.header}</h2>
@@ -329,20 +297,14 @@ export default function SiteBuilderPage() {
     </div>
   );
 
-  // ---------------------------------------------------------------------------
-  // 🟫 TEMPLATE 3: SOFT PERSONAL BRAND (Warm, Narrative, Centered)
-  // ---------------------------------------------------------------------------
   const CreativeTemplate = () => (
     <div className="bg-[#fdfbf7] text-stone-800 font-sans min-h-full">
-      {/* 1. HERO */}
       <section className="p-12 md:p-32 text-center min-h-[70vh] flex flex-col justify-center items-center">
         <h1 className="text-6xl md:text-8xl font-serif font-medium text-stone-900 mb-6">{siteData.hero.name}</h1>
         <div className={`h-1 w-24 ${accent.split(' ')[2]} opacity-40 mb-8`} />
         <p className="text-xl text-stone-600 italic font-serif max-w-2xl">{siteData.hero.title}</p>
         <p className="mt-6 text-stone-500">{siteData.hero.value}</p>
       </section>
-
-      {/* 2. ABOUT & 3. IMPACT */}
       <section className="p-12 md:p-24 bg-white border-y border-stone-100">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400">{siteData.about.header}</h3>
@@ -357,8 +319,6 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-
-      {/* 4. SKILLS & 5. EXPERIENCE */}
       <section className="p-12 md:p-24 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24">
         <div>
            <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400 mb-8">Expertise</h3>
@@ -381,8 +341,6 @@ export default function SiteBuilderPage() {
            </div>
         </div>
       </section>
-
-      {/* 6. PROJECTS & 7. INSIGHTS */}
       <section className="p-12 md:p-24 bg-[#f4f1ea]">
         <div className="max-w-5xl mx-auto">
           <h3 className="text-center text-sm font-bold uppercase tracking-[0.3em] text-stone-400 mb-16">Work & Thoughts</h3>
@@ -406,8 +364,6 @@ export default function SiteBuilderPage() {
           </div>
         </div>
       </section>
-
-      {/* 8. TESTIMONIALS & 9. EDUCATION */}
       <section className="p-12 md:p-24 border-b border-stone-200">
          <div className="max-w-4xl mx-auto text-center space-y-12">
             {siteData.testimonials.map((t, i) => (
@@ -420,8 +376,6 @@ export default function SiteBuilderPage() {
             </div>
          </div>
       </section>
-
-      {/* 10. RESUME, 11. CONTACT, 12. FOOTER */}
       <section className="p-12 md:p-32 text-center">
         <h2 className="text-5xl font-serif mb-8 text-stone-900">{siteData.contact.header}</h2>
         <p className="text-stone-500 mb-12">{siteData.contact.sub}</p>

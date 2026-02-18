@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   FileText, Globe, Zap, ArrowRight, TrendingUp, Users, Eye, 
-  Download, User, ShieldCheck // FIX: Added Download to imports to prevent build fail
+  Download, User, ShieldCheck // FIX: Added Download to imports
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -94,7 +94,7 @@ export default function DashboardPage() {
             </motion.div>
           </Link>
 
-          {/* 3. PROFILE BUILDER TILE (Links to /profile) */}
+          {/* 3. PROFILE BUILDER TILE (Connected to /profile) */}
           <Link href="/profile">
             <motion.div 
               variants={fadeInUp} whileHover={{ y: -8, borderColor: 'rgba(59,130,246,0.3)' }}
