@@ -1,76 +1,63 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   ChevronLeft, Lock, CheckCircle2, 
   Map, ShieldCheck, Video, Presentation, 
-  FileText, BrainCircuit, Play, ChevronDown, ChevronUp
+  FileText, BrainCircuit, Play, ChevronDown, ChevronUp, AlertTriangle
 } from 'lucide-react';
 import Link from 'next/link';
 
-// IMPORT THE CENTRAL BRAIN
-import { useUser } from '../../../context/UserContext';
+// IMPORT YOUR USER CONTEXT
+import { useUser } from '@/app/context/UserContext'; 
 
-// --- HIERARCHICAL CURRICULUM DATABASE ---
-// Structure: Domain -> Modules -> Assets (Video/PPT/Text/Quiz)
-const pathDatabase: Record<string, any> = {
-  "indian-taxation": {
-    title: "Indian Taxation",
-    description: "Navigate from tax structures to practical ITR filing and optimization.",
-    modules: [
-      {
-        id: "mod-1",
-        title: "Module 1: Income Tax Foundations",
-        description: "Master the structural basics of Indian tax slabs, regimes, and deductions.",
-        status: "in-progress", // 'completed', 'in-progress', 'locked'
-        assets: [
-          { id: "a1", type: "video", title: "The Indian Tax Structure Explained", duration: "12 mins", status: "completed" },
-          { id: "a2", type: "text", title: "Old vs New Regime Comparison Sheet", duration: "5 mins read", status: "completed" },
-          { id: "a3", type: "ppt", title: "Key Deductions (80C, 80D, HRA) Deck", duration: "15 Slides", status: "unlocked" },
-          { id: "a4", type: "quiz", title: "Module 1 Certification Test", duration: "10 Questions", status: "locked" } // Unlocks when assets above are done
-        ]
-      },
-      {
-        id: "mod-2",
-        title: "Module 2: Practical Tax Filing (ITR)",
-        description: "Step-by-step application of tax laws to file your own returns.",
-        status: "locked",
-        assets: [
-          { id: "b1", type: "video", title: "Step-by-Step ITR-1 Walkthrough", duration: "25 mins", status: "locked" },
-          { id: "b2", type: "ppt", title: "Common Filing Mistakes to Avoid", duration: "10 Slides", status: "locked" },
-          { id: "b3", type: "text", title: "Capital Gains Tax Cheatsheet", duration: "8 mins read", status: "locked" },
-          { id: "b4", type: "quiz", title: "Module 2 Certification Test", duration: "15 Questions", status: "locked" }
-        ]
-      },
-      {
-        id: "mod-3",
-        title: "Module 3: Advanced Tax Optimization",
-        description: "Strategic planning to legally minimize tax liability across asset classes.",
-        status: "locked",
-        assets: [
-          { id: "c1", type: "video", title: "Corporate Salary Structuring", duration: "18 mins", status: "locked" },
-          { id: "c2", type: "quiz", title: "Final Domain Mastery Exam", duration: "20 Questions", status: "locked" }
-        ]
-      }
-    ]
-  }
-  // Add other domains (EPF, SIP, AI, etc.) following this exact nested structure
-};
+// IMPORT THE NEW MODULAR DATABASE
+import { pathDatabase } from '../../data';
 
-export default function SkillMapPage({ params }: { params: { id: string } }) {
+export default function SkillMapPage({ params }: { params: Promise<{ id: string }> }) {
   const { userData, isLoaded, isAuthenticated } = useUser();
   const router = useRouter();
   
-  // UI State for Accordions (Expanding/Collapsing Modules)
-  const [expandedModule, setExpandedModule] = useState<string | null>("mod-1");
+  // 1. Safely unwrap the dynamic route parameters
+  const resolvedParams = use(params);
+  const pathId = resolvedParams.id;
   
-  const currentPath = pathDatabase[params.id] || pathDatabase["indian-taxation"]; // Fallback for testing
+  // 2. Fetch the specific domain data from your modular database
+  const currentPath = pathDatabase[pathId]; 
+  
+  // 3. UI State for Accordions (Defaults to opening the first module if data exists)
+  const [expandedModule, setExpandedModule] = useState<string | null>(
+    currentPath && currentPath.modules ? currentPath.modules[0].id : null
+  );
 
   useEffect(() => {
     if (isLoaded && !isAuthenticated) router.push('/login');
   }, [isLoaded, isAuthenticated, router]);
 
   if (!isLoaded || !isAuthenticated) return null;
+
+  // -----------------------------------------------------------------
+  // 🛑 THE SAFETY CATCH (PREVENTS CRASHES IF ID MISMATCHES)
+  // -----------------------------------------------------------------
+  if (!currentPath) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center p-6 selection:bg-emerald-500/30">
+        <AlertTriangle size={56} className="text-emerald-500 mb-6 opacity-80" />
+        <h1 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 text-center">
+          Domain In Development
+        </h1>
+        <p className="text-zinc-400 mb-8 text-center max-w-md">
+          The curriculum pathway for <span className="text-emerald-400 font-mono">"{pathId}"</span> is currently being mapped or the link is incorrect.
+        </p>
+        <Link 
+          href="/upskilling" 
+          className="px-8 py-3 bg-white text-black text-sm font-black uppercase tracking-widest rounded hover:bg-emerald-400 transition-colors"
+        >
+          Return to Hub
+        </Link>
+      </div>
+    );
+  }
 
   // Helper to render the correct icon based on asset type
   const getAssetIcon = (type: string, status: string) => {
@@ -107,8 +94,6 @@ export default function SkillMapPage({ params }: { params: { id: string } }) {
             {currentPath.description}
           </p>
         </div>
-
-        
 
         {/* --- THE GAMIFIED ROADMAP --- */}
         <div className="relative pt-4">

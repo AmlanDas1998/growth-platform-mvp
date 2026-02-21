@@ -1,23 +1,22 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link'; // Fixes the ReferenceError: Link is not defined
+import React, { useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Zap, LayoutDashboard, LogIn, Menu, X, LogOut } from 'lucide-react';
 
+// IMPORT YOUR USER CONTEXT TO DRIVE THE CTA STATE
+import { useUser } from '@/app/context/UserContext';
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
-
-  // Check for session on mount and whenever the path changes
-  useEffect(() => {
-    const session = localStorage.getItem('user_session');
-    setIsLoggedIn(session === 'active');
-  }, [pathname]);
+  
+  // Connect directly to the global authentication state
+  const { isAuthenticated, isLoaded } = useUser();
 
   const handleLogout = () => {
     localStorage.removeItem('user_session');
-    setIsLoggedIn(false);
+    // Force a hard reload to clear all states and redirect to home
     window.location.href = '/'; 
   };
 
@@ -25,7 +24,7 @@ export default function Navbar() {
     { name: "The Hub", href: "/" },
     { name: "SIP Academy", href: "/sip-education" },
     { name: "Mutual Funds", href: "/mf-education" },
-    { name: "CV Builder", href: "/cv-builder" }, // Re-added link
+    { name: "CV Builder", href: "/cv-builder" }, 
     { name: "Site Builder", href: "/site-builder" },
   ];
 
@@ -58,7 +57,10 @@ export default function Navbar() {
 
           {/* Auth CTA Toggle */}
           <div className="flex items-center gap-4">
-            {isLoggedIn ? (
+            {!isLoaded ? (
+              // Prevent flashing by showing an invisible placeholder while checking auth
+              <div className="w-24 h-10 opacity-0"></div>
+            ) : isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <Link 
                   href="/dashboard" 
