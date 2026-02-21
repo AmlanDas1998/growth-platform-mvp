@@ -2,18 +2,18 @@
 import React from 'react';
 import { Zap, ArrowRight } from 'lucide-react';
 
-// 1. Import the Central Brain to access the login function
+// 1. Import the Central Brain to access the login trigger
 import { useUser } from '../context/UserContext';
 
 export default function LoginPage() {
-  // 2. Pull the login trigger from our context
+  // 2. Pull the login function from our context
   const { login } = useUser();
 
   return (
     <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 relative font-sans">
       
       {/* Subtle Premium Background Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-zinc-950 to-zinc-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/10 via-zinc-950 to-zinc-950 pointer-events-none" />
       
       <div className="relative z-10 w-full max-w-md p-10 rounded-[3rem] bg-zinc-900/80 border border-white/5 backdrop-blur-xl shadow-2xl">
         
