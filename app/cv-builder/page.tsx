@@ -24,9 +24,8 @@ export default function CVBuilderPage() {
   // --- LOCAL UI STATE ---
   const [activeTemplate, setActiveTemplate] = useState('executive');
   const [activeColor, setActiveColor] = useState('fintech');
-
   const [expandedSection, setExpandedSection] = useState<string | null>('personal');
-
+  
   const ALL_TEMPLATES = [
     'executive', 'modern', 'tech', 'corporate', 'creative', 'timeline', 
     'academic', 'block', 'consulting', 'silicon-valley', 'banking', 
@@ -37,7 +36,7 @@ export default function CVBuilderPage() {
 
   const nextSlide = () => setCarouselIndex((prev) => (prev + 3 >= ALL_TEMPLATES.length ? 0 : prev + 3));
   const prevSlide = () => setCarouselIndex((prev) => (prev - 3 < 0 ? Math.max(0, ALL_TEMPLATES.length - 3) : prev - 3));
-
+  
   const [visibility, setVisibility] = useState<Record<string, boolean>>({
     personal: true, summary: true, experience: true, education: true, skills: true, projects: true, certifications: true,
   });
@@ -1422,7 +1421,12 @@ export default function CVBuilderPage() {
         {/* --- CONTROLS SIDEBAR --- */}
         <div className="lg:col-span-4 flex flex-col gap-6 h-full overflow-hidden">
           
-        
+          <div className="flex items-center justify-between bg-zinc-900 p-4 rounded-2xl border border-white/5 shrink-0">
+            <Link href="/dashboard" className="flex items-center gap-2 text-xs font-black uppercase text-zinc-500 hover:text-white transition-colors">
+              <ArrowLeft size={14} /> Hub
+            </Link>
+            <Settings size={16} className="text-zinc-500" />
+          </div>
 
           <div className="flex-1 bg-zinc-900 border border-white/5 rounded-3xl flex flex-col overflow-hidden shadow-2xl">
             <div className="p-6 border-b border-white/10 shrink-0">
