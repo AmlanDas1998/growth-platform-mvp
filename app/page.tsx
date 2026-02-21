@@ -5,15 +5,34 @@ import {
   Sparkles, Award, TrendingUp, BookOpen, 
   PlayCircle, ArrowRight, Github, Mail, Globe, Zap 
 } from 'lucide-react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+// 1. IMPORT THE CENTRAL BRAIN
+import { useUser } from './context/UserContext';
 
 export default function FinalPremiumHub() {
   const [mounted, setMounted] = useState(false);
+  
+  // 2. PULL AUTHENTICATION STATE
+  const { isAuthenticated, isLoaded } = useUser();
+  const router = useRouter();
 
-  // Fix for Hydration Error: Ensure component is mounted before rendering browser-specific logic
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 3. THE SMART REDIRECT LOGIC FOR BUTTONS
+  const handleProtectedRouting = (targetPath: string) => {
+    if (!isLoaded) return; // Wait until local storage is checked
+
+    if (!isAuthenticated) {
+      // If not logged in, force them to the login page first
+      router.push('/login');
+    } else {
+      // If logged in, let them through
+      router.push(targetPath);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -66,14 +85,21 @@ export default function FinalPremiumHub() {
             { title: "Video Academy", sub: "Studio Library", icon: <PlayCircle size={32} />, link: "/video-library", neon: "border-indigo-500/40 text-indigo-400 shadow-indigo-500/10" },
             { title: "Upskilling", sub: "Certifications", icon: <Award size={32} />, link: "/upskilling", neon: "border-emerald-500/40 text-emerald-400 shadow-emerald-500/10" },
           ].map((tile) => (
-            <Link key={tile.title} href={tile.link} className={`group p-10 rounded-[3.5rem] border bg-white/5 backdrop-blur-2xl transition-all duration-700 hover:-translate-y-4 hover:bg-white/10 ${tile.neon}`}>
+            
+            // 4. CHANGED <Link> TO A BUTTON THAT TRIGGERS THE GATEKEEPER
+            <button 
+              key={tile.title} 
+              onClick={() => handleProtectedRouting(tile.link)}
+              className={`text-left group p-10 rounded-[3.5rem] border bg-white/5 backdrop-blur-2xl transition-all duration-700 hover:-translate-y-4 hover:bg-white/10 ${tile.neon}`}
+            >
                <div className="mb-10 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_currentColor]">{tile.icon}</div>
                <h3 className="text-3xl font-black tracking-tighter mb-4 italic">{tile.title}</h3>
                <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-50 mb-10">{tile.sub}</p>
                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest group-hover:gap-4 transition-all">
                   ENTER <ArrowRight size={14} />
                </div>
-            </Link>
+            </button>
+
           ))}
         </div>
       </section>
@@ -126,7 +152,7 @@ export default function FinalPremiumHub() {
           <div className="space-y-6">
             <h5 className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Identity</h5>
             <div className="space-y-4 text-xs font-bold text-slate-300">
-              <a href="mailto:amlan@avirtoya.com" className="flex items-center gap-3 hover:text-cyan-400 transition-colors"><Mail size={16}/> amlan@avirtoya.com</a>
+              <a href="mailto:contact@amlandas.in" className="flex items-center gap-3 hover:text-cyan-400 transition-colors"><Mail size={16}/> contact@amlandas.in</a>
               <p className="flex items-center gap-3"><Globe size={16}/> Pune, Maharashtra</p>
             </div>
           </div>
@@ -134,8 +160,8 @@ export default function FinalPremiumHub() {
           <div className="space-y-6">
             <h5 className="text-[10px] font-black uppercase tracking-widest text-fuchsia-400">Social</h5>
             <div className="flex gap-8 items-center">
-               <Link href="https://github.com/amlan-das" className="text-slate-400 hover:text-white transition-all"><Github size={24}/></Link>
-               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-white">LinkedIn</span>
+               <button onClick={() => window.open('https://github.com/AmlanDas1998', '_blank')} className="text-slate-400 hover:text-white transition-all"><Github size={24}/></button>
+               <button onClick={() => window.open('https://www.linkedin.com/in/amlan-das-600839140/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B6rCgRfEfSWysVHMBMibhkg%3D%3D', '_blank')} className="text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-white">LinkedIn</button>
             </div>
           </div>
         </footer>
