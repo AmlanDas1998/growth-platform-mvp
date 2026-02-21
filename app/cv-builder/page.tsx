@@ -62,7 +62,7 @@ export default function CVBuilderPage() {
       filename: `${personal?.name?.replace(/\s+/g, '_') || 'Professional'}_CV.pdf`,
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: 'as const', format: 'as const', orientation: 'as const' }
     };
     html2pdf().set(opt).from(element).save();
   };
@@ -1543,30 +1543,41 @@ export default function CVBuilderPage() {
         </div>
 
         {/* --- A4 DOCUMENT PREVIEW --- */}
-        <div className="lg:col-span-8 bg-zinc-900/50 rounded-[3rem] border border-white/5 p-8 flex justify-center overflow-y-auto custom-scrollbar">
-          <div id="cv-document" className="transition-all duration-300 ease-in-out">
-            {activeTemplate === 'executive' && renderExecutive()}
-            {activeTemplate === 'modern' && renderModernSplit()}
-            {activeTemplate === 'tech' && renderTechMinimalist()}
-            {activeTemplate === 'corporate' && renderCorporateClassic()}
-            {activeTemplate === 'creative' && renderCreativeRight()}
-            {activeTemplate === 'timeline' && renderSleekTimeline()}
-            {activeTemplate === 'academic' && renderAcademicSplit()}
-            {activeTemplate === 'block' && renderBoldBlock()}
-            {activeTemplate === 'consulting' && renderConsulting()}
-            {activeTemplate === 'silicon-valley' && renderSiliconValley()}
-            {activeTemplate === 'banking' && renderBanking()}
-            {activeTemplate === 'modern-exec' && renderModernExecutive()}
-            {activeTemplate === 'product-leader' && renderProductLeader()}
-            {activeTemplate === 'agency' && renderCreativeAgency()}
-            {activeTemplate === 'data-scientist' && renderDataScientist()}
-            {activeTemplate === 'growth' && renderGrowthMarketer()}
-            {activeTemplate === 'architect' && renderArchitect()}
-            {activeTemplate === 'hybrid' && renderHybridGrid()}
-          </div>
-        </div>
+        <div className="lg:col-span-8 bg-zinc-900/50 rounded-[3rem] border border-white/5 p-8 flex flex-col items-center overflow-y-auto custom-scrollbar relative">
+          
+          {/* FLOATING TEMPLATE CAROUSEL */}
+          <div className="sticky top-0 z-50 mb-10 w-full max-w-[700px] flex items-center justify-between bg-black/40 backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2 shadow-[0_20px_50px_rgba(0,0,0,0.5)] shrink-0">
+            <button onClick={prevSlide} className="p-2.5 hover:bg-white/10 rounded-full transition-all text-zinc-400 hover:text-white">
+              <ArrowLeft size={18} />
+            </button>
 
-      </div>
-    </div>
+            <div className="flex gap-3 overflow-hidden">
+              {ALL_TEMPLATES.slice(carouselIndex, carouselIndex + 3).map((tpl) => (
+                <button 
+                  key={tpl}
+                  onClick={() => setActiveTemplate(tpl)}
+                  className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-full transition-all whitespace-nowrap border
+                    ${activeTemplate === tpl 
+                      ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]' 
+                      : 'bg-transparent text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'}`}
+                >
+                  {tpl.replace('-', ' ')}
+                </button>
+              ))}
+            </div>
+
+            <button onClick={nextSlide} className="p-2.5 hover:bg-white/10 rounded-full transition-all text-zinc-400 hover:text-white rotate-180">
+              <ArrowLeft size={18} />
+            </button>
+          </div>
+
+          {/* SINGLE CV DOCUMENT CONTAINER */}
+          <div id="cv-document" className="transition-all duration-500 ease-in-out shadow-2xl">
+             {renderTemplate()} 
+          </div>
+
+        </div> {/* Close lg:col-span-8 */}
+      </div> {/* Close max-w-[1600px] grid */}
+    </div> {/* Close min-h-screen */}
   );
 }
