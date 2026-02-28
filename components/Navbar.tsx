@@ -38,7 +38,7 @@ export default function Navbar() {
               <Zap size={16} className="fill-black" />
             </div>
             <span className="font-black text-sm tracking-tighter uppercase italic text-white">
-              AMLAN <span className="text-cyan-400">DAS.</span>
+              First<span className="text-cyan-400">Cap.in</span>
             </span>
           </Link>
 

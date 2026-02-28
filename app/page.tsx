@@ -64,10 +64,10 @@ export default function FinalPremiumHub() {
              <Sparkles size={14} className="fill-cyan-400" /> Amlan Das Platform
           </div>
           <h1 className="text-[12vw] font-bold tracking-tighter leading-[0.85] uppercase italic">
-            Ultra <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-indigo-500">Premium.</span>
+            Welcome to  <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-indigo-500">FirstCap.in</span>
           </h1>
           <p className="max-w-xl mx-auto text-lg md:text-xl text-slate-400 font-light leading-relaxed">
-            A boutique workspace for scaling **Avir Toya** and mastering high-end financial systems in **Pune**.
+            FirstCap – The Financial & Career Infrastructure for India’s Emerging Talent.
           </p>
         </motion.div>
       </section>
