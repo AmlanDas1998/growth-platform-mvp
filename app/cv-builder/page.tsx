@@ -5,7 +5,7 @@ import {
   Eye, EyeOff, Lock, Edit3, LayoutTemplate, ChevronDown, ChevronUp, Link as LinkIcon, Palette
 } from 'lucide-react';
 import Link from 'next/link';
-import { useUser } from '../context/UserContext';
+import { useUser } from '@/app/context/UserContext';
 
 // --- TAILWIND COLOR DICTIONARY ---
 // Define curated 3-color palettes (Primary, Secondary, Accent)
@@ -60,9 +60,9 @@ export default function CVBuilderPage() {
     const opt = {
       margin: 0,
       filename: `${personal?.name?.replace(/\s+/g, '_') || 'Professional'}_CV.pdf`,
-      image: { type: 'jpeg', quality: 1 },
+      image: { type: 'jpeg' as const, quality: 1 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'as const', format: 'as const', orientation: 'as const' }
+      jsPDF: { unit: 'in' as const, format: 'a4' as const, orientation: 'portrait' as const }
     };
     html2pdf().set(opt).from(element).save();
   };
@@ -77,7 +77,9 @@ export default function CVBuilderPage() {
     { id: 'certifications', title: 'Certifications', isMaster: true },
   ];
 
-
+  // =========================================================================
+  // PASTE ALL 18 TEMPLATE FUNCTIONS BELOW THIS LINE
+  // =========================================================================
   // =========================================================================
   // TEMPLATE 1: EXECUTIVE (Standard ATS, Single Column, Centered Header)
   // =========================================================================
@@ -1413,6 +1415,33 @@ export default function CVBuilderPage() {
     </div>
   );
 
+  // =========================================================================
+  // RENDER ENGINE ROUTER
+  // =========================================================================
+  const renderTemplate = () => {
+    switch (activeTemplate) {
+      case 'executive': return renderExecutive();
+      case 'modern': return renderModernSplit();
+      case 'tech': return renderTechMinimalist();
+      case 'corporate': return renderCorporateClassic();
+      case 'creative': return renderCreativeRight();
+      case 'timeline': return renderSleekTimeline();
+      case 'academic': return renderAcademicSplit();
+      case 'block': return renderBoldBlock();
+      case 'consulting': return renderConsulting();
+      case 'silicon-valley': return renderSiliconValley();
+      case 'banking': return renderBanking();
+      case 'modern-exec': return renderModernExecutive();
+      case 'product-leader': return renderProductLeader();
+      case 'agency': return renderCreativeAgency();
+      case 'data-scientist': return renderDataScientist();
+      case 'growth': return renderGrowthMarketer();
+      case 'architect': return renderArchitect();
+      case 'hybrid': return renderHybridGrid();
+      default: return renderExecutive();
+    }
+  };
+
   // --- MAIN RENDER ---
   return (
     <div className="min-h-screen bg-zinc-950 text-white pt-28 pb-10 px-6 font-sans selection:bg-cyan-500/30">
@@ -1421,13 +1450,6 @@ export default function CVBuilderPage() {
         {/* --- CONTROLS SIDEBAR --- */}
         <div className="lg:col-span-4 flex flex-col gap-6 h-full overflow-hidden">
           
-          <div className="flex items-center justify-between bg-zinc-900 p-4 rounded-2xl border border-white/5 shrink-0">
-            <Link href="/dashboard" className="flex items-center gap-2 text-xs font-black uppercase text-zinc-500 hover:text-white transition-colors">
-              <ArrowLeft size={14} /> Hub
-            </Link>
-            <Settings size={16} className="text-zinc-500" />
-          </div>
-
           <div className="flex-1 bg-zinc-900 border border-white/5 rounded-3xl flex flex-col overflow-hidden shadow-2xl">
             <div className="p-6 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-3 mb-6">
@@ -1440,36 +1462,21 @@ export default function CVBuilderPage() {
               {/* Architecture & Color Engine */}
               <div className="space-y-5">
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-2 mb-2">
-                    <LayoutTemplate size={12} /> ATS Architecture
+                  <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-2 mb-4">
+                    <Palette size={12} /> Color Palette Engine
                   </span>
-                  <div className="grid grid-cols-3 gap-2">
-                    {['executive', 'modern', 'tech', 'corporate', 'creative', 'timeline', 'academic', 'block', 'consulting', 'silicon-valley', 'banking', 'modern-exec', 'product-leader', 'agency', 'data-scientist', 'growth', 'architect', 'hybrid'].map((tpl) => (
-                      <button 
-                        key={tpl}
-                        onClick={() => setActiveTemplate(tpl)}
-                        className={`py-2 text-[10px] font-bold uppercase tracking-widest border rounded-lg transition-all
-                          ${activeTemplate === tpl ? 'bg-white text-black border-white' : 'bg-zinc-950 text-zinc-400 border-white/10 hover:border-white/30'}`}
-                      >
-                        {tpl}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 flex items-center gap-2 mb-2">
-                    <Palette size={12} /> Accent Color
-                  </span>
-                  <div className="flex gap-3">
+                  <div className="flex gap-4">
                     {Object.entries(themeColors).map(([name, data]) => (
                       <button
                         key={name}
                         onClick={() => setActiveColor(name)}
-                        style={{ backgroundColor: data.hex }}
-                        className={`w-6 h-6 rounded-full transition-all ${activeColor === name ? 'ring-2 ring-white ring-offset-2 ring-offset-zinc-900 scale-110' : 'opacity-50 hover:opacity-100'}`}
+                        className={`group flex overflow-hidden rounded-full w-8 h-8 transition-all border-2 ${activeColor === name ? 'border-white scale-110 shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'border-transparent opacity-50 hover:opacity-100'}`}
                         title={name}
-                      />
+                      >
+                        <div className="w-1/3 h-full" style={{ backgroundColor: data.primary }} />
+                        <div className="w-1/3 h-full" style={{ backgroundColor: data.secondary }} />
+                        <div className="w-1/3 h-full" style={{ backgroundColor: data.accent }} />
+                      </button>
                     ))}
                   </div>
                 </div>
