@@ -1583,8 +1583,8 @@ export default function CVBuilderPage() {
              {renderTemplate()} 
           </div>
 
-        </div> {/* Close lg:col-span-8 */}
-      </div> {/* Close max-w-[1600px] grid */}
-    </div> {/* Close min-h-screen */}
+        </div>
+      </div>
+    </div>
   );
 }
